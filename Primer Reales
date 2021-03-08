@@ -1,0 +1,138 @@
+import os
+import sys
+from xml.dom import minidom
+import  time
+
+class datos:
+    def __init__(self,posx,posy,dato):
+        self.posx = posx
+        self.posy = posy
+        self.dato = dato
+
+class matriz:
+    def __init__(self, nombre,N,M,x,y,dato):
+        self.nombre = nombre
+        self.N = N
+        self.M = M
+        self.X = x
+        self.Y = y
+        self.dat = dato
+
+
+class Nodo(object):
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+
+class lista_circular(object):
+    def __init__(self):
+        self.cabeza = None
+
+    def vacio(self):
+        return self.cabeza is None
+
+    def longi(self):
+        actu = self.cabeza
+        count = 0
+        while actu is not None:
+            count += 1
+            if actu.next == self.cabeza:
+                break
+            else:
+                actu = actu.next
+        return count
+
+    def recorrido(self):
+        if self.vacio():
+            return
+        actu = self.cabeza
+        print(actu.data)
+        while actu.next != self.cabeza:
+            actu = actu.next
+            print(actu.data)
+
+    def agregar_ini(self, data):
+        nodo = Nodo(data)
+        if self.vacio():
+            self.cabeza = nodo
+            nodo.next = self.cabeza
+        else:
+            actu = self.cabeza
+            while actu.next is not self.cabeza:
+                actu = actu.next
+            actu.next = nodo
+            nodo.next = self.cabeza
+            self.cabeza = nodo
+
+    def agregar_ulti(self, data):
+        nodo = Nodo(data)
+        if self.vacio():
+            self.cabeza = nodo
+            nodo.next = self.cabeza
+        else:
+            actu = self.cabeza
+            while actu.next is not self.cabeza:
+                actu = actu.next
+            actu.next = nodo
+            nodo.next = self.cabeza
+
+    def insertar_nodo(self, indice, data):
+        nodo = Nodo(data)
+        if indice < 0 or indice > self.longi():
+            print("Insercion Incorrecta")
+            return False
+        elif indice == 0:
+            self.agregar_ini(data)
+        elif indice == 0:
+            self.agregar_ulti()
+        else:
+            actu = self.cabeza
+            previ = None
+            count = 0
+            while count < indice:
+                previ = actu
+                actu = actu.next
+                count += 1
+            previ.next = nodo
+            nodo.next = actu
+
+    def eliminar_nodo(self, data):
+        if self.vacio():
+            return
+        elif data == self.cabeza.data:
+            actu = self.cabeza
+            while actu.next != self.cabeza:
+                actu = actu.next
+            actu.next = self.cabeza.next
+            self.cabeza = self.cabeza.next
+        else:
+            actu = self.cabeza
+            previ = None
+            while actu.data != data:
+                previ = actu
+                actu = actu.next
+            previ.next = actu.next
+
+    def existe(self, data):
+        actu = self.cabeza
+        while actu is not None:
+            if actu.data == data:
+                return True
+            elif actu.next == self.cabeza:
+                return False
+            else:
+                actu = actu.next
+        return False
+
+
+Lc = lista_circular()
+Lprin = lista_circular()
+contador = 0
+variL = lista_circular()
+mydoc = minidom.parse('entrada1.xml').documentElement
+grupos = mydoc.getElementsByTagName('matriz')
+matri = mydoc.getElementsByTagName('dato')
+Matri = list()
+ope = list()
+prueba = []

@@ -1,0 +1,208 @@
+import os
+import sys
+from xml.dom import minidom
+import time
+
+
+class datos:
+    def __init__(self, posx, posy, dato):
+        self.posx = posx
+        self.posy = posy
+        self.dato = dato
+
+
+class matriz:
+    def __init__(self, nombre, N, M, dato):
+        self.nombre = nombre
+        self.N = N
+        self.M = M
+        self.dat = dato
+
+
+class Nodo(object):
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+
+class lista_circular(object):
+    def __init__(self):
+        self.cabeza = None
+
+    def vacio(self):
+        return self.cabeza is None
+
+    def longi(self):
+        actu = self.cabeza
+        count = 0
+        while actu is not None:
+            count += 1
+            if actu.next == self.cabeza:
+                break
+            else:
+                actu = actu.next
+        return count
+
+    def recorrido(self):
+        if self.vacio():
+            return
+        actu = self.cabeza
+        print(actu.data)
+        while actu.next != self.cabeza:
+            actu = actu.next
+            print(actu.data)
+
+    def agregar_ini(self, data):
+        nodo = Nodo(data)
+        if self.vacio():
+            self.cabeza = nodo
+            nodo.next = self.cabeza
+        else:
+            actu = self.cabeza
+            while actu.next is not self.cabeza:
+                actu = actu.next
+            actu.next = nodo
+            nodo.next = self.cabeza
+            self.cabeza = nodo
+
+    def agregar_ulti(self, data):
+        nodo = Nodo(data)
+        if self.vacio():
+            self.cabeza = nodo
+            nodo.next = self.cabeza
+        else:
+            actu = self.cabeza
+            while actu.next is not self.cabeza:
+                actu = actu.next
+            actu.next = nodo
+            nodo.next = self.cabeza
+
+    def insertar_nodo(self, indice, data):
+        nodo = Nodo(data)
+        if indice < 0 or indice > self.longi():
+            print("Insercion Incorrecta")
+            return False
+        elif indice == 0:
+            self.agregar_ini(data)
+        elif indice == 0:
+            self.agregar_ulti()
+        else:
+            actu = self.cabeza
+            previ = None
+            count = 0
+            while count < indice:
+                previ = actu
+                actu = actu.next
+                count += 1
+            previ.next = nodo
+            nodo.next = actu
+
+    def eliminar_nodo(self, data):
+        if self.vacio():
+            return
+        elif data == self.cabeza.data:
+            actu = self.cabeza
+            while actu.next != self.cabeza:
+                actu = actu.next
+            actu.next = self.cabeza.next
+            self.cabeza = self.cabeza.next
+        else:
+            actu = self.cabeza
+            previ = None
+            while actu.data != data:
+                previ = actu
+                actu = actu.next
+            previ.next = actu.next
+
+    def existe(self, data):
+        actu = self.cabeza
+        while actu is not None:
+            if actu.data == data:
+                return True
+            elif actu.next == self.cabeza:
+                return False
+            else:
+                actu = actu.next
+        return False
+
+
+Lc = lista_circular()
+Lprin = lista_circular()
+contador = 0
+variL = lista_circular()
+Matri = list()
+ope = []
+prueba = []
+
+
+def menu():
+    os.system('cls')
+
+
+while True:
+    menu()
+
+
+    def wait():
+        m.getch()
+
+
+    while True:
+        print("Menu Principal:")
+        print("1. Cargar Archivos")
+        print("2. Procesar Archivos")
+        print("3. Escribir archivo salida")
+        print("4. Mostrar Datos del Estudiante")
+        print("5. Generar Grafica")
+        print("6. Salida")
+        menprin = input("Ingrese una opcion : ")
+
+        if menprin == "1":
+            gui = input("Ingrese la ruta del archivo: ")
+            mydoc = minidom.parse(gui).documentElement
+            grupos = mydoc.getElementsByTagName('matriz')
+            matri = mydoc.getElementsByTagName('dato')
+
+            pru = 0
+
+            for i in range(len(grupos)):
+                LD = lista_circular()
+                Lc.agregar_ini(grupos[i].attributes['nombre'].value)
+                print(grupos[i].attributes['nombre'].value)
+                Lc.agregar_ini(grupos[i].attributes['n'].value)
+                Lc.agregar_ini(grupos[i].attributes['m'].value)
+                # contador += 1
+                mul = int(grupos[i].attributes['n'].value) * int(grupos[i].attributes['m'].value)
+                # print(grupos[i].attributes['n'].value)
+                # print(grupos[i].attributes['m'].value)
+                resu = mul + pru - 1
+                for duf in range(len(matri)):
+                    if (duf >= pru and duf <= resu):
+                        # LcM.append(matri[duf].firstChild.data)
+                        ur = matriz(grupos[i].attributes['nombre'].value, grupos[i].attributes['n'].value,
+                                    grupos[i].attributes['m'].value, matri[duf].firstChild.data)
+                        LD.agregar_ulti(ur)
+                        prueba.append(ur)
+                        # print(LD.posx,LD.posy,LD.dato)
+                        # print(LcM)
+                        if duf == resu:
+                            for ulti in prueba:
+                                ope.append(ur)
+                pru = mul + pru  # Fin Release 2
+        if menprin == "2":  # Release 3 desde aquí
+            time.sleep(3)
+            print("Procesando archivo...")
+            time.sleep(5)
+            print("Calculando matriz Binaria...")
+            time.sleep(3)
+            print("Sumando Tuplas...")
+            time.sleep(5)
+            print("creando matriz reducida...")
+        if menprin == "3":
+            print("hola")
+        if menprin == "4":
+            print("Jose Javier Santizo Díaz")
+            print("201607814")
+            print("Introduccion a la programacion Seccion 'C'")
+            print("Ingenieria en Ciencias y Sistemas")
+            print("Primer Semestre 2021")
